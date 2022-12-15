@@ -10,7 +10,8 @@ validateEnv();
 
 const app = new App(
     [new PostController(), new UserController()],
-    Number(process.env.PORT)
+    Number(process.env.PORT),
+    () => console.log(`App is running...`)
 );
 
 app.listen();

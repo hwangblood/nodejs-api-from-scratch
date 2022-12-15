@@ -12,9 +12,9 @@ class UserController implements Controller {
     private userService = new UserService();
 
     constructor() {
-        this.initialiseRoutes();
+        this.initRoutes();
     }
-    initialiseRoutes() {
+    initRoutes() {
         this.router.post(
             `${this.path}/register`,
             validateMiddleware(validate.register),

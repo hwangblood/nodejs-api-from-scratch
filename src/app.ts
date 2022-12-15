@@ -10,21 +10,34 @@ import errorMiddleware from "@/middleware/error.middleware";
 class App {
     public express: Application;
     public port: number;
+    public controllers: Controller[];
+    public onSuccess: () => void;
 
-    constructor(controllers: Controller[], port: number) {
+    constructor(
+        controllers: Controller[],
+        port: number,
+        onSuccess: () => void
+    ) {
         this.express = express();
         this.port = port;
+        this.controllers = controllers;
+        this.onSuccess = onSuccess;
 
-        this.initDatabseConnection();
+        this.setup();
+    }
+    private async setup() {
+        await this.initDatabseConnection();
         this.initMiddleware();
-        this.initControllers(controllers);
+        this.initControllers();
         this.initErrorHanding();
+
+        this.onSuccess();
     }
     private initErrorHanding(): void {
         this.express.use(errorMiddleware);
     }
-    private initControllers(controllers: Controller[]): void {
-        controllers.forEach((controller: Controller) => {
+    private initControllers(): void {
+        this.controllers.forEach((controller: Controller) => {
             this.express.use("/api", controller.router);
         });
     }
@@ -52,7 +65,7 @@ class App {
 
     public listen() {
         this.express.listen(this.port, () => {
-            console.log(`App running on port ${this.port}`);
+            // console.log(`App running on port ${this.port}`);
         });
     }
 }
