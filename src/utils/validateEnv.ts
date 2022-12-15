@@ -9,6 +9,7 @@ function validateEnv(): void {
         MONGO_PASSWORD: str(),
         MONGO_PATH: str(),
         PORT: port({ default: 3000 }),
+        JWT_SECRET: str(),
     });
 }
 
